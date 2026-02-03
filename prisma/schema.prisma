@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  pending
+  processing
+  shipped
+  completed
+  cancelled
+}
+
+enum OrderSource {
+  web
+  shopee
+  tiktok
+}
+
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  image_path  String
+  category    String
+  is_active   Boolean     @default(true)
+  orderItems  OrderItem[]
+}
+
+model Outlet {
+  id               Int     @id @default(autoincrement())
+  name             String
+  type             String
+  address          String
+  google_maps_link String
+  latitude         Float
+  longitude        Float
+  image_path       String
+}
+
+model Order {
+  id               Int          @id @default(autoincrement())
+  code             String
+  tracking_code    String
+  receipt_number   String
+  customer_name    String
+  customer_phone   String
+  customer_email   String?
+  customer_address String?
+  customer_city    String?
+  customer_province String?
+  customer_postal_code String?
+  total_price      Int
+  status           OrderStatus  @default(pending)
+  source           OrderSource  @default(web)
+  shipping_courier String
+  items            OrderItem[]
+  createdAt        DateTime     @default(now())
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int     @default(1)
+  price     Int
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
