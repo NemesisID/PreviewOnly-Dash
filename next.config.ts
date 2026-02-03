@@ -2,10 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  devIndicators: {
-    buildActivity: false,
-    appIsrStatus: false,
-  },
   images: {
     remotePatterns: [
       {
