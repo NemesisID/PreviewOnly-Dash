@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
 import OrdersView from "./view";
 
@@ -36,5 +37,13 @@ export default async function OrdersPage() {
     })),
   }));
 
-  return <OrdersView orders={serialized} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="text-sm text-muted-foreground">Loading orders...</div>
+      }
+    >
+      <OrdersView orders={serialized} />
+    </Suspense>
+  );
 }
