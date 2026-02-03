@@ -1,48 +1,48 @@
 -- CreateTable
-CREATE TABLE "Product" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "price" INTEGER NOT NULL,
-    "image_path" TEXT NOT NULL,
-    "category" TEXT NOT NULL,
-    "is_active" BOOLEAN NOT NULL DEFAULT true
-);
+CREATE TABLE `Product` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
+    `price` INT NOT NULL,
+    `image_path` VARCHAR(1024) NOT NULL,
+    `category` VARCHAR(255) NOT NULL,
+    `is_active` BOOLEAN NOT NULL DEFAULT true
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- CreateTable
-CREATE TABLE "Outlet" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "google_maps_link" TEXT NOT NULL,
-    "latitude" REAL NOT NULL,
-    "longitude" REAL NOT NULL,
-    "image_path" TEXT NOT NULL
-);
+CREATE TABLE `Outlet` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `type` VARCHAR(255) NOT NULL,
+    `address` TEXT NOT NULL,
+    `google_maps_link` TEXT NOT NULL,
+    `latitude` DOUBLE NOT NULL,
+    `longitude` DOUBLE NOT NULL,
+    `image_path` VARCHAR(1024) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- CreateTable
-CREATE TABLE "Order" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "code" TEXT NOT NULL,
-    "tracking_code" TEXT NOT NULL,
-    "receipt_number" TEXT NOT NULL,
-    "customer_name" TEXT NOT NULL,
-    "customer_phone" TEXT NOT NULL,
-    "total_price" INTEGER NOT NULL,
-    "status" TEXT NOT NULL DEFAULT 'pending',
-    "source" TEXT NOT NULL DEFAULT 'web',
-    "shipping_courier" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE `Order` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `code` VARCHAR(255) NOT NULL,
+    `tracking_code` VARCHAR(255) NOT NULL,
+    `receipt_number` VARCHAR(255) NOT NULL,
+    `customer_name` VARCHAR(255) NOT NULL,
+    `customer_phone` VARCHAR(50) NOT NULL,
+    `total_price` INT NOT NULL,
+    `status` ENUM('pending','processing','shipped','completed','cancelled') NOT NULL DEFAULT 'pending',
+    `source` ENUM('web','shopee','tiktok') NOT NULL DEFAULT 'web',
+    `shipping_courier` VARCHAR(255) NOT NULL,
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- CreateTable
-CREATE TABLE "OrderItem" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "orderId" INTEGER NOT NULL,
-    "productId" INTEGER NOT NULL,
-    "quantity" INTEGER NOT NULL DEFAULT 1,
-    "price" INTEGER NOT NULL,
-    CONSTRAINT "OrderItem_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "OrderItem_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
-);
+CREATE TABLE `OrderItem` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `orderId` INT NOT NULL,
+    `productId` INT NOT NULL,
+    `quantity` INT NOT NULL DEFAULT 1,
+    `price` INT NOT NULL,
+    CONSTRAINT `OrderItem_orderId_fkey` FOREIGN KEY (`orderId`) REFERENCES `Order` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `OrderItem_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
